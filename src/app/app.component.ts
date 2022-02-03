@@ -1,6 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, fromEvent, iif,merge,  Observable, of, ReplaySubject, Subscription } from 'rxjs';
-import { map, mergeAll, switchMap,  switchMapTo,  takeUntil,  takeWhile,  tap } from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  fromEvent,
+  iif,
+  merge,
+  Observable,
+  of,
+  ReplaySubject,
+  Subscription,
+} from 'rxjs';
+import {
+  map,
+  mergeAll,
+  switchMap,
+  switchMapTo,
+  takeUntil,
+  takeWhile,
+  tap,
+} from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -14,30 +31,26 @@ export class AppComponent implements OnInit {
   documentLoad = fromEvent(document, 'DOMContentLoaded');
 
   ngOnInit() {
-     
-   
     this.createStream();
   }
 
-  createStream(){
-    this.getDOMLoadedState()
-      .subscribe((i) => {
-        console.log(i);
-      });
+  createStream() {
+    this.getDOMLoadedState().subscribe((i) => {
+      console.log(i);
+    });
   }
 
   getDOMLoadedState(): Observable<boolean> {
     const currentState = new BehaviorSubject(false);
-    if (document.readyState == 'interactive' ) {
+    if (document.readyState == 'interactive') {
       currentState.next(true);
-    }
-    else { 
-      
+    } else {
       currentState.next(false);
     }
-  
-    return fromEvent(document, 'DOMContentLoaded').pipe(switchMapTo(currentState));
-      
+
+    return fromEvent(document, 'DOMContentLoaded').pipe(
+      switchMapTo(currentState)
+    );
   }
 
   ngOnDestroy() {
