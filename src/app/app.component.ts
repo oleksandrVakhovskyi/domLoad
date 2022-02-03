@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
   BehaviorSubject,
+  from,
   fromEvent,
   iif,
   merge,
@@ -10,8 +11,10 @@ import {
   Subscription,
 } from 'rxjs';
 import {
+  filter,
   map,
   mergeAll,
+  mergeMap,
   switchMap,
   switchMapTo,
   takeUntil,
@@ -29,13 +32,16 @@ export class AppComponent implements OnInit {
 
   choiceSub!: Subscription;
   documentLoad = fromEvent(document, 'DOMContentLoaded');
-
+  value = from([1,2,3,4])
   ngOnInit() {
     this.createStream();
   }
 
   createStream() {
-    this.getDOMLoadedState().subscribe((i) => {
+    this.choiceSub = from(this.getDOMLoadedState()).pipe(
+      filter(val => val === true),
+      switchMapTo(this.value)
+    ).subscribe((i) => {
       console.log(i);
     });
   }
