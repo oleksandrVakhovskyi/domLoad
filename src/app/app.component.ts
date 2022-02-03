@@ -60,6 +60,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    // this.choiceSub.unsubscribe();
+    this.choiceSub.unsubscribe();
   }
 }
