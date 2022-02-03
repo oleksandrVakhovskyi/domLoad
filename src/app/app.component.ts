@@ -39,7 +39,6 @@ export class AppComponent implements OnInit {
 
   createStream() {
     this.choiceSub = from(this.getDOMLoadedState()).pipe(
-      filter(val => val === true),
       switchMapTo(this.value)
     ).subscribe((i) => {
       console.log(i);
@@ -48,15 +47,12 @@ export class AppComponent implements OnInit {
 
   getDOMLoadedState(): Observable<boolean> {
     const currentState = new BehaviorSubject(false);
-    if (document.readyState == 'interactive') {
+    if (document.readyState == 'interactive' || 'complete') {
       currentState.next(true);
-    } else {
-      currentState.next(false);
-    }
+    } 
 
-    return fromEvent(document, 'DOMContentLoaded').pipe(
-      switchMapTo(currentState)
-    );
+    return fromEvent(document, 'DOMContentLoaded').pipe(switchMapTo(currentState))
+    
   }
 
   ngOnDestroy() {
