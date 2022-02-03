@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
 
   getDOMLoadedState(): Observable<boolean> {
     const currentState = new BehaviorSubject(false);
-    if (document.readyState == 'interactive' || 'complete') {
+    if (document.readyState == 'interactive' || document.readyState == 'complete') {
       currentState.next(true);
     } 
 
