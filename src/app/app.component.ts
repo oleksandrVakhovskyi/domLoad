@@ -1,35 +1,46 @@
 import { Component, OnInit } from '@angular/core';
-import { fromEvent, iif, of, Subscription } from 'rxjs';
+import { BehaviorSubject, fromEvent, iif,merge,  Observable, of, ReplaySubject, Subscription } from 'rxjs';
+import { map, mergeAll, switchMap,  switchMapTo,  takeUntil,  takeWhile,  tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   title = 'domload';
 
   choiceSub!: Subscription;
   documentLoad = fromEvent(document, 'DOMContentLoaded');
-  choice = iif(
-    () => !!this.documentLoad,
-    of('document has load'),
-    of('document was not loaded')
-  );
 
-  ngOnInit(){
-     this.createStream(); 
+  ngOnInit() {
+     
+   
+    this.createStream();
   }
 
   createStream(){
-    this.choiceSub = this.choice.pipe(
-      ).subscribe((i)=> { console.log('result: ', i);
-      }) 
+    this.getDOMLoadedState()
+      .subscribe((i) => {
+        console.log(i);
+      });
   }
 
-  ngOnDestroy(){
-    this.choiceSub.unsubscribe();
+  getDOMLoadedState(): Observable<boolean> {
+    const currentState = new BehaviorSubject(false);
+    if (document.readyState == 'interactive' ) {
+      currentState.next(true);
+    }
+    else { 
+      
+      currentState.next(false);
+    }
+  
+    return fromEvent(document, 'DOMContentLoaded').pipe(switchMapTo(currentState));
+      
   }
 
-
+  ngOnDestroy() {
+    // this.choiceSub.unsubscribe();
+  }
 }
