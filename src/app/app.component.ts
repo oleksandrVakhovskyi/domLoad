@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
     this.choiceSub = from(this.getDOMLoadedState()).pipe(
       switchMapTo(this.value)
     ).subscribe((i) => {
-      console.log(i);
+      console.log('Value:',  i);
     });
   }
 
