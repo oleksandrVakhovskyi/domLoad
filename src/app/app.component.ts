@@ -31,8 +31,8 @@ export class AppComponent implements OnInit {
   title = 'domload';
 
   choiceSub!: Subscription;
-  documentLoad = fromEvent(document, 'DOMContentLoaded');
-  value = from([1,2,3,4])
+  value = from([1,2,3,4]);
+
   ngOnInit() {
     this.createStream();
   }
